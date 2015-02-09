@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body>
+    <div id="wrap">
+        <% include ../partials/header.ejs %>
+            <div class="container">
+                
+                <% if (message.length> 0) { %>
+                    <div class="alert alert-success">
+                        <%=message %>
+                    </div>
+                <% } %>
+
+                        <% include ../partials/admin-nav.ejs %>
+
+                            <span class="text-lg">Current Pages<a href="page/create" class="add-link">+</a></span>
+
+                            <% if(pages.length> 0){ %>
+                                <table class="table table-striped admin-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Description</th>
+                                            <th>template</th>
+                                            <th>add_to_nav</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% pages.forEach( function( page ){ %>
+                                            <tr>
+                                                <td><%=page.name %></td>
+                                                <td><%=page.description %></td>
+                                                <td><%=page.template %></td>
+                                                <td><%=page.add_to_nav %></td>
+                                                <td>
+                                                    <a href="/page/update/<%= page._id %>" title="Update this page">Edit</a>&nbsp;&nbsp;
+                                                    <a href="/page/delete/<%= page._id %>" title="Delete this page">Delete</a>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table>
+
+                            <% }else{ %>
+                                    <span class="none-msg">There are no current pages</span>
+                            <% }; %>
+
+            </div>
+            <div id="push"></div>
+    </div>
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>

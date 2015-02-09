@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head.ejs %>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/main.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <div id="wrap">
+      <% include ../partials/header.ejs %> 
+      <%
+         var hasUpload = false,
+         fieldObj = JSON.parse(pageTemplate.field_list);
+                  
+         fieldObj.fields.forEach(function(field){
+
+             if(field.type == 'upload'){
+                hasUpload = true;
+             }
+
+          });
+ 
+      %>  
+
+    <div class="container">
+       
+          <h3>Update <%= page.name %> Content</h3>
+  
+
+          <% if(hasUpload){ %>
+            
+             <form id="content-form" role="form" action="/content/update" method="post" accept-charset="utf-8" 
+                   enctype = "multipart/form-data">
+             <input type="hidden" name="has_file" value="true">
+          
+          <% }else{ %>
+         
+             <form id="content-form" role="form" action="/content/update" method="post" accept-charset="utf-8" >
+          
+          <% } %>
+ 
+               <input type="hidden" id="page-id" name="page_id" value="<%= page._id %>">
+               <input type="hidden" id="content-id" name="content_id" value="<%= content._id %>">
+               
+ 
+               <%
+                 
+                 fieldObj = JSON.parse(pageTemplate.field_list);
+                  
+                  fieldObj.fields.forEach(function(field){
+
+                     switch(field.type){
+
+                        case "text":
+
+                          %>
+                            <div class="form-group">
+                              <label for="name"><%= field.name %></label>
+                              <input type="text" class="form-control" name="<%= field.class %>" value="<%= content.customField(field.class)%>">
+                            </div>
+                          <%
+                          break;
+
+                         case "textarea":
+
+                          %>
+                            <div class="form-group">
+                              <label for="name"><%= field.name %></label>
+                              <textarea class="form-control" name="<%= field.class %>" ><%= content.customField(field.class)%></textarea>
+                            </div>
+                          <%
+                          break;
+
+                          case "upload":
+ 
+                            if(content.customField(field.class) != null){
+                                 
+                               %>
+                               <div class="form-group <%= field.class %>">
+                                                                
+                      
+
+                                 <%= content.customField(field.class)%><a class="del-image <%= field.class %>" id="<%= content.customField(field.class) %>" href="#">Delete</a>
+                              </div>
+
+                               <%
+
+
+                              }else{
+                                %>
+                                 <div class="form-group">
+                                  <label for="name"><%= field.name %></label>
+                                  <input type="file" class="form-control" name="<%= field.class %>" />
+                                 </div>
+                              <%
+                              }
+ 
+                          
+                          break;
+
+                          case "select":
+
+                          %>
+                            <div class="form-group <%= field.class %>">
+                              <label for="<%= field.class %>"><%= field.name %></label>
+                              
+                              
+                               <select name="<%= field.class %>" class="form-control form-inline">
+                                  <% var opt_ary = field.data.split(","); 
+                                     for(var i = 0; i < opt_ary.length; i++){
+                                        %>
+                                          <option value="<%= opt_ary[i] %>" <%= (opt_ary[i] == content.customField(field.class))?'selected': ''%>><%= opt_ary[i] %></option>
+                                        <%
+
+                                     }
+                                  %>                                
+  
+                               </select> 
+
+                            </div>
+                          <%
+                          break;
+                     }
+
+                  })
+                %>
+ 
+             <button type="submit" class="btn btn-primary">Submit</button>
+          </form>       
+       </div>
+   <div id="push"></div>
+   </div> 
+   <% include ../partials/footer.ejs %> 
+ </body>
+</html>

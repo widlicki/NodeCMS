@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head.ejs %>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+    <script src="/javascripts/main.js" type="text/javascript"></script>
+</head>
+
+<body>
+    <div id="wrap">
+        <% include ../partials/header.ejs %>
+            <div class="container">
+
+                <h3>Add Page</h3>
+
+                <form role="form" action="/page/create" method="post" accept-charset="utf-8">
+                    
+                    <div class="form-group">
+                        <label for="name">Page Name:</label>
+                        <input type="text" class="form-control" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" class="form-control" name="description">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="template">Template:</label>
+
+                        <select name="template" id="template" class="form-control">
+                            <option value="">Select Page Template</option>
+                            <% pageTemplates.forEach(function(template){ %>
+
+                                <option value="<%= template.name%>">
+                                    <%=template.name%>
+                                </option>
+
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <!-- <div class="form-group">
+                      <label for="thumb_width">Image Thumbnail Width:</label>
+                      <input type="text" class="form-control" name="thumb_width">
+                    </div>
+
+                    <div class="form-group">
+                      <label for="thumb_height">Image Thumbnail Height:</label>
+                      <input type="text" class="form-control" name="thumb_height">
+                    </div> -->
+
+                    <div class="form-group">
+                        <label for="searchable">Add Search:</label>
+
+                        <select name="searchable" class="form-control">
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="add_to_nav">Add to Navigation?:</label>
+
+                        <select name="add_to_nav" class="form-control">
+                            <option value="Y">Yes</option>
+                            <option value="N">No</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contenthtml">Content HTML:</label>
+                        <textarea class="form-control" rows='20' name="contenthtml" id="contenthtml"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="formhtml">Form HTML:</label>
+                        <textarea class="form-control" rows='20' name="formhtml" id="formhtml"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+
+
+            </div>
+            <div id="push"></div>
+    </div>
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>

@@ -1,0 +1,11 @@
+var mongoose = require('mongoose');
+
+var siteSchema = mongoose.Schema({
+
+     site_name : String,
+     home_page : String,
+     disable_new_users : String
+       
+});
+
+module.exports = mongoose.model('Site', siteSchema);

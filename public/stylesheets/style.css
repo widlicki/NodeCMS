@@ -1,0 +1,133 @@
+
+
+
+
+
+.content-mng{
+	width: 100%;
+	border: 1px solid lightgray;
+	padding: 15px;
+	margin-top: 10px;
+}
+
+header{
+	margin-bottom: 10px;
+}
+
+.admin-table{
+	width:100%;
+	border: 1px solid lightgray;
+}
+
+th{
+	font-weight: bold;
+	font-size: 16px;
+}
+
+#form-fields{
+	margin-top: 30px;
+	margin-bottom: 20px;
+}
+
+.add-link{
+	margin-left: 20px;
+  font-size: 32px;
+  text-decoration: none;
+}
+
+.none-msg{
+  font-size: 20px;
+  font-style: italic;
+  display: block;
+  margin-top: 20px;
+}
+
+.text-lg{
+	font-weight: 500;
+	font-size: 24px;
+
+}
+
+form {
+  margin-bottom: 30px;
+}
+
+body { padding-top: 70px; }
+
+.btn-wide{
+	width: 24%;
+}
+
+#admin-nav-div{
+  margin-bottom: 20px;
+}
+
+#admin-nav-div a{
+  margin-bottom: 10px;
+}
+
+.content-div{
+  margin-bottom: 10px;
+  border: 1px solid lightgray;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#search-content-div{
+   
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+.input-medium{
+  width: 400px;
+}
+
+html,
+      body {
+        height: 100%;
+        /* The html and body elements cannot have any padding or margin. */
+      }
+
+      
+
+      /* Wrapper for page content to push down footer */
+      #wrap {
+        min-height: 100%;
+        height: auto !important;
+        height: 100%;
+        /* Negative indent footer by it's height */
+        margin: 0 auto -60px;
+      }
+
+      /* Set the fixed height of the footer here */
+      #push,
+      #footer {
+        height: 60px;
+      }
+      #footer {
+        background-color: black;
+      }
+
+      /* Lastly, apply responsive CSS fixes as necessary */
+      @media (max-width: 767px) {
+        #footer {
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+          background-color: black;
+        }
+      }
+
+
+
+
+
+
+
+
+
+
+
+  

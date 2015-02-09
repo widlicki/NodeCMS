@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body>
+    <div id="wrap">
+        <% include ../partials/header.ejs %>
+            <div class="container">
+                <h3>Are you sure you want to delete this page content?</h3>
+                <form role="form" action="/content/delete/<%=pageContent._id %>" method="post" accept-charset="utf-8">
+                    <button type="submit" class="btn btn-primary">Yes</button>
+                    <a href="/content/manage">Cancel</a>
+                </form>
+            </div>
+            <div id="push"></div>
+    </div>
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>

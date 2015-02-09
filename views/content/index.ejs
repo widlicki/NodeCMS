@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body>
+    <div id="wrap">
+        <% include ../partials/header.ejs %>
+            <div class="container">
+
+                <% include ../partials/admin-nav.ejs %>
+
+                    <span class="text-lg">Site Content</span>
+                    <% if(pages.length> 0){ %>
+                        <table class="table table-striped admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Page Name</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% pages.forEach( function( page ){ %>
+                                    <tr>
+                                        <td>
+                                            <%=page.name %>
+                                        </td>
+                                        <td>
+                                            <a href="/content/manage/<%= page._id %>" title="View this page">Manage Content</a>
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+
+                   <% }else{ %>
+                            <span class="none-msg">There is no site content</span>
+                   <% }; %>
+            </div>
+            <div id="push"></div>
+    </div>    
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>

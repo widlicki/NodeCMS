@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head.ejs %>
+</head>
+
+ 
+
+<body>
+    <div id="wrap">
+        <% include ../partials/header.ejs %>
+            <div class="container">
+                <% if (message.length> 0) { %>
+                    <div class="alert alert-success">
+                        <%=message %>
+                    </div>
+                <% } %>
+
+                        <% include ../partials/admin-nav.ejs %>
+
+                            <span class="text-lg">Site Preferences</span>
+                            <br><br>
+
+                            <form role="form" action="/site-config/update" method="post" accept-charset="utf-8">
+ 
+                                <% if(siteConfig._id !==null){ %>
+                                    <input type="hidden" id="config-id" name="config_id" value="<%= siteConfig._id%>">
+                                <% } %>
+
+                                        <div class="form-group">
+                                            <label for="site_name">Site Name:</label>
+                                            <input type="text" class="form-control" name="site_name" value="<%= siteConfig.site_name%>">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="home_page">Home Page:</label>
+                                            <select name="home_page" id="home_page" class="form-control form-inline">
+                                                <option value="">Select Page</option>
+                                                <% pages.forEach(function(page){ %>
+                                                    <option value="<%= page._id%>" <%=( page._id==siteConfig.home_page)? 'selected': ''%>>
+                                                        <%=page.name%>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="home_page">Home Page:</label>
+                                            <select name="disable_new_users" id="home_page" class="form-control form-inline">
+                                                <option value="">Disable Add New Users?</option>
+                                                <option value="Y" <%=(siteConfig.disable_new_users == "Y")? 'selected': ''%>>Yes</option>
+                                                <option value="N" <%=(siteConfig.disable_new_users == "N")? 'selected': ''%>>NO</option>
+                                            </select>
+                                        </div>
+
+                                  <button type="submit" class="btn btn-primary">Save</button>
+                            </form>
+            </div>
+            <div id="push"></div>
+    </div>
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>

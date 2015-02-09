@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body>
+    <div id="wrap">
+        <% include ../partials/header.ejs %>
+
+            <div class="container">
+
+                <h3>Add Page Template</h3>
+
+                <form role="form" action="/page-template/create" method="post" accept-charset="utf-8">
+                    <div class="form-group">
+                        <label for="name">Template Name:</label>
+                        <input type="text" class="form-control" name="name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <input type="text" class="form-control" name="description">
+                    </div>
+
+                    <div id="form-fields">
+                        <h4>Add Form Fields ( Note: all field names must be unique )</h4>
+                        <hr>
+
+                        <% for(var i=1; i<21; i++) { %>
+
+                            <div class="form-group form-inline">
+
+                                <input type="text" class="form-control" name="fname<%= i %>" placeholder="Field Name">
+                                <select name="ftype<%= i %>" class="form-control form-inline">
+                                    <option value="">Select Type</option>
+                                    <option value="text">Text</option>
+                                    <option value="textarea">Textarea</option>
+                                    <option value="upload">Image Upload</option>
+                                    <option value="select">Select</option>
+                                </select>
+                                <input type="text" class="form-control" name="fdata<%= i %>" placeholder="Default Value">
+
+                                <select name="freq<%= i %>" class="form-control form-inline">
+                                    <option value="">Required?</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+
+                                <select name="fsearch<%= i %>" class="form-control form-inline">
+                                    <option value="">Searchable?</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+
+                            </div>
+
+                            <% } %>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+
+            </div>
+            <div id="push"></div>
+    </div>
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>
