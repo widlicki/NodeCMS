@@ -1,10 +1,12 @@
 var mongoose = require('mongoose')
 var Page = require('../models/page');
+var Site = require('../models/site-config');
+
 
 module.exports = {
 
     //Creates object bases on custom fields defined in page templates
-    parseCustomFields: function(reqBody) {
+    parseCustomFields: function (reqBody) {
 
         var formFieldData = {
             fields: []
@@ -37,24 +39,51 @@ module.exports = {
 
     },
 
-    getSiteNav: function(callback) {
+    getSiteNav: function (req, res, next) {
 
-         
+        if (req.session.nav == undefined) {
 
-        Page.find({'add_to_nav': true}, function(err, pages) {
+            Page.find({
+                'add_to_nav': true
+            }, function (err, pages) {
 
-            var navStr = "";
+                var navStr = "";
 
-            for (i = 0; i < pages.length; i++) {
-                navStr += '<li><a href="/site/' + pages[i].id + '">' + pages[i].name + '</a></li>'
+                for (i = 0; i < pages.length; i++) {
+                    navStr += '<li><a href="/site/' + pages[i].id + '">' + pages[i].name + '</a></li>'
+                }
+
+                req.session.nav = navStr;
+
+                next();
+
+            });
+
+        } else {
+
+            next();
+        }
+
+    },
+
+    getSiteConfig: function (req, res, next) {
+
+        Site.findOne(function (err, siteConfig) {
+
+            if (siteConfig == null) {
+                siteConfig = new Site({
+                    _id: undefined,
+                    site_name: "",
+                    home_page: "",
+                    disable_new_users: ""
+                });
             }
-             
- 
-            callback(null, navStr);
+
+            req.session.siteConfig = siteConfig;
+            next();
         });
 
-         
-
     }
+
 
 }

@@ -5,7 +5,7 @@
     <% include ../partials/head.ejs %>
 </head>
 
- 
+
 
 <body>
     <div id="wrap">
@@ -15,18 +15,19 @@
                     <div class="alert alert-success">
                         <%=message %>
                     </div>
-                <% } %>
+                    <% } %>
 
                         <% include ../partials/admin-nav.ejs %>
 
                             <span class="text-lg">Site Preferences</span>
-                            <br><br>
+                            <br>
+                            <br>
 
-                            <form role="form" action="/site-config/update" method="post" accept-charset="utf-8">
- 
+                            <form role="form" action="/save-site-config" method="post" accept-charset="utf-8">
+
                                 <% if(siteConfig._id !==null){ %>
                                     <input type="hidden" id="config-id" name="config_id" value="<%= siteConfig._id%>">
-                                <% } %>
+                                    <% } %>
 
                                         <div class="form-group">
                                             <label for="site_name">Site Name:</label>
@@ -49,12 +50,12 @@
                                             <label for="home_page">Home Page:</label>
                                             <select name="disable_new_users" id="home_page" class="form-control form-inline">
                                                 <option value="">Disable Add New Users?</option>
-                                                <option value="Y" <%=(siteConfig.disable_new_users == "Y")? 'selected': ''%>>Yes</option>
-                                                <option value="N" <%=(siteConfig.disable_new_users == "N")? 'selected': ''%>>NO</option>
+                                                <option value="Y" <%=(siteConfig.disable_new_users=="Y" )? 'selected': ''%>>Yes</option>
+                                                <option value="N" <%=(siteConfig.disable_new_users=="N" )? 'selected': ''%>>NO</option>
                                             </select>
                                         </div>
 
-                                  <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-primary">Save</button>
                             </form>
             </div>
             <div id="push"></div>

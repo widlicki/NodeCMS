@@ -7,29 +7,29 @@
 
 <body>
     <div id="wrap">
-       <nav class="navbar navbar-inverse navbar-fixed-top">
-          <div class="container">
-            <div class="navbar-header"></div>
-          </div>
-        </nav>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
-                <% if (message.length> 0) { %>
-                    <div class="alert alert-success">
-                        <%=message %>
-                    </div>
-                <% } %>
-                <h3>Login</h3>
-                <form role="form" action="/login" method="post" accept-charset="utf-8">
-                    <div class="form-group">
-                         <input type="text" class="form-control input-medium" id="email" name="email" placeholder="email">
-                    </div>
-                    <div class="form-group">
-                        <input type="password" name="password" class="form-control input-medium" id="password" na placeholder="password">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Log In</button>
-                </form>
+                <div class="navbar-header"></div>
             </div>
-            <div id="push"></div>
+        </nav>
+        <div class="container">
+            <% if (message.length> 0) { %>
+                <div class="alert alert-success">
+                    <%=message %>
+                </div>
+                <% } %>
+                    <h3>Login</h3>
+                    <form role="form" action="/doLogin" method="post" accept-charset="utf-8">
+                        <div class="form-group">
+                            <input type="text" class="form-control input-medium" id="email" name="email" placeholder="email">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" name="password" class="form-control input-medium" id="password" na placeholder="password">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Log In</button>
+                    </form>
+        </div>
+        <div id="push"></div>
     </div>
     <% include ../partials/footer.ejs %>
 </body>

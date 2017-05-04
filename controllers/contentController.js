@@ -5,67 +5,44 @@ var mongoose = require('mongoose'),
     customFields = require('mongoose-custom-fields'),
     global = require('../common/common.js'),
     fs = require('fs'),
-    loggedIn = require('../check-auth'),
     async = require('async'),
     Site = require('../models/site-config');
 
+module.exports = {
 
-module.exports.controller = function(app) {
 
-    app.get('/content', loggedIn, function(req, res) {
+    getContent: function (req, res) {
 
-        async.series([
+        Page.find(function (err, pages) {
+            res.render('content', {
+                title: 'Manage Content',
+                pages: pages,
+                nav: req.session.nav,
+                loggedIn: true,
+                siteConfig: req.session.siteConfig
+            });
+        });
 
-                //GET SITE CONFIG
-                require('../get-site-config.js'),
+    },
 
-                //GET SITE NAV FROM DATABASE
-                require('../get-site-nav.js'),
 
-                //GET ALL PAGE TEMPLATES 
-                function(callback) {
-                    Page.find(function(err, pages) {
-                        callback(null, pages);
-                    });
-                }
-            ],
 
-            //FINALLY RENDER PAGE TEMPLATES VIEW
-            function(err, results) {
-                res.render('content', {
-                    title: 'Manage Content',
-                    pages: results[2],
-                    nav: results[1],
-                    loggedIn: true,
-                    siteConfig: results[0]
-                });
-            }
-        )
-
-    });
-
-    app.get('/content/manage/:id', loggedIn, function(req, res) {
+    manageContentById: function (req, res) {
 
         async.series([
-
-                //GET SITE CONFIG
-                require('../get-site-config.js'),
-
-                //GET SITE NAV FROM DATABASE
-                require('../get-site-nav.js'),
 
                 //GET ALL PAGE INFO 
-                function(callback) {
-                    Page.findById(req.params.id, function(err, page) {
+                function (callback) {
+                    Page.findById(req.params.id, function (err, page) {
                         callback(null, page);
                     });
                 },
 
                 //GET ALL PAGE CONTENT
-                function(callback) {
+                function (callback) {
                     Content.find({
                         'page': req.params.id
-                    }, function(err, pageContents) {
+                    }, function (err, pageContents) {
                         callback(null, pageContents);
                     });
                 }
@@ -73,10 +50,10 @@ module.exports.controller = function(app) {
             ],
 
             //FINALLY RENDER CONTENT VIEW
-            function(err, results) {
+            function (err, results) {
 
-                var page = results[2],
-                    content = results[3],
+                var page = results[0],
+                    content = results[1],
                     allContent = "",
                     contentDisp = "",
                     fieldContent = "",
@@ -105,93 +82,65 @@ module.exports.controller = function(app) {
                     content: allContent,
                     message: req.flash('info'),
                     page_id: req.params.id,
-                    nav: results[1],
+                    nav: req.session.nav,
                     loggedIn: true,
-                    siteConfig: results[0]
+                    siteConfig: req.session.siteConfig
                 });
 
             }
         )
-    });
 
-    //CONTENT CREATE FORM 
-    app.get('/content/create/:id', loggedIn, function(req, res) {
+    },
 
-        async.waterfall([
- 
-                //GET SITE NAV FROM DATABASE
-                require('../get-site-nav.js'),
 
-                //GET PAGE INFO
-                function(siteNav, callback) {
+    createContent: function (req, res) {
 
-                    var results = [];
-                    results.push(siteNav);
+        Page.findById(req.params.id)
+            .then(function (page) {
+                var result = [];
+                result.push(page);
+                return result;
+            })
+            
+            .then(function (result) {
 
-                    Page.findById(req.params.id, function(err, page) {
-                        results.push(page);
-                        callback(null, results);
+                return PageTemplate.findOne({
+                        'name': result[0].template
+                    })
+                    .then(function (pageTemplate) {
+
+                        result.push(pageTemplate);
+                        return result;
                     });
-                },
 
-                //GET TEMPLATE INFO
-                function(results, callback) {
-                     
-                    PageTemplate.findOne({'name': results[1].template}, function(err, pageTemplate) {
-                        
-                        results.push(pageTemplate);
-                        callback(null, results);
-                    
-                    });
-                },
+            })
+            .then(function (result) {
 
-                 //GET SITE CONFIG INFO
-                function(results, callback) {
-                     
-                    Site.findOne(function(err, siteConfig) {
-                        
-                        if(siteConfig == null){
-                            
-                            siteConfig = new Site({
-                                               
-                                _id: undefined,
-                                site_name: "",
-                                home_page: "",
-                                disable_new_users: ""
-
-                            });
-                        }
-
-                        results.push(siteConfig);
-                        callback(null, results);
-                    
-                    });
-                }
-
-            ],
-
-            //FINALLY RENDER CONTENT CREATE VIEW
-            function(err, results) {
-
-                res.render('content/create', {
+               res.render('content/create', {
                     title: 'Create Content',
-                    page: results[1],
-                    pageTemplate: results[2],
-                    nav: results[0],
+                    page: result[0],
+                    pageTemplate: result[1],
+                    nav: req.session.nav,
                     loggedIn: true,
                     message: req.flash('info'),
-                    siteConfig: results[3]
+                    siteConfig: req.session.siteConfig
                 });
-            
-            }
-        )
 
-    });
+            })
+            .then(undefined, function (err) {
 
-    //HANDLE CONTENT CREATE
-    app.post('/content/create', loggedIn, function(req, res) {
+                console.log(err);
+            })
+        
+        
+         
 
-        PageTemplate.findById(req.body.page_template_id, function(err, pageTemplate) {
+    },
+
+
+    doCreateContent: function (req, res) {
+
+        PageTemplate.findById(req.body.page_template_id, function (err, pageTemplate) {
 
             var PostParams = Object.keys(req.body),
                 content = new Content(),
@@ -228,17 +177,14 @@ module.exports.controller = function(app) {
                             img_name_ary.push(imgObj.name);
                             img_field_ary.push(imgObj.fieldname);
 
-
-
-
                         }
                     }
                 }
             }
- 
+
             var fieldObj = JSON.parse(pageTemplate.field_list);
-             
-            PostParams.forEach(function(param) {
+
+            PostParams.forEach(function (param) {
 
                 if (param != 'page_id' && param != 'page_template_id') {
 
@@ -246,7 +192,7 @@ module.exports.controller = function(app) {
 
 
                     //Check if required fields have values
-                    fieldObj.fields.forEach(function(field) {
+                    fieldObj.fields.forEach(function (field) {
 
                         if (param == field.class && field.req == "yes" && req.body[param] == "") {
                             passedValidation = false;
@@ -273,7 +219,7 @@ module.exports.controller = function(app) {
                     }
                 }
 
-                content.save(function(err) {
+                content.save(function (err) {
                     req.flash('info', 'Content Has been added!')
                     res.redirect('/content/manage/' + req.body.page_id);
 
@@ -283,88 +229,64 @@ module.exports.controller = function(app) {
                 res.redirect('/content/create/' + req.body.page_id);
             }
         });
-    });
 
-    //CONTENT UPDATE FORM
-    app.get('/content/update/:id', loggedIn, function(req, res) {
+    },
 
-        async.waterfall([
+    updateContent: function (req, res) {
 
-                require('../get-site-nav.js'),
+        Content.findById(req.params.id)
+            .then(function (content) {
+                var result = [];
+                result.push(content);
+                return result;
+            })
+            .then(function (result) {
 
-                function(siteNav, callback) {
+                return Page.findById(
+                        result[0].page
+                    )
+                    .then(function (page) {
 
-                    var results = [];
-                    results.push(siteNav);
-
-                    Content.findById(req.params.id, function(err, content) {
-                        results.push(content);
-                        callback(null, results);
+                        result.push(page);
+                        return result;
                     });
-                },
 
-                function(results, callback) {
-                   
-                    Page.findById(results[1].page, function(err, page) {
-                        results.push(page);
-                        callback(null, results);
+            })
+            .then(function (result) {
+
+                return PageTemplate.findOne({
+                        'name': result[1].template
+                    })
+                    .then(function (pageTemplate) {
+
+                        result.push(pageTemplate);
+
+                        return result;
                     });
-                },
 
-                function(results, callback) {
-                   
-                    PageTemplate.findOne({
-                        'name': results[2].template
-                    }, function(err, template) {
-                        results.push(template);
-                        callback(null, results);
-                    });
-                },
-
-                //GET SITE CONFIG INFO
-                function(results, callback) {
-                     
-                    Site.findOne(function(err, siteConfig) {
-                        
-                        if(siteConfig == null){
-                            
-                            siteConfig = new Site({
-                                               
-                                _id: undefined,
-                                site_name: "",
-                                home_page: "",
-                                disable_new_users: ""
-
-                            });
-                        }
-
-                        results.push(siteConfig);
-                        callback(null, results);
-                    
-                    });
-                }
-
-            ],
-
-            function(err, results) {
+            })
+            .then(function (result) {
 
                 res.render('content/update', {
                     title: 'Update Content',
-                    content: results[1],
-                    page: results[2],
-                    pageTemplate: results[3],
-                    nav: results[0],
+                    content: result[0],
+                    page: result[1],
+                    pageTemplate: result[2],
+                    nav: req.session.nav,
                     loggedIn: true,
-                    siteConfig: results[4]
+                    siteConfig: req.session.siteConfig
                 });
 
-            }
-        )
+            })
+            .then(undefined, function (err) {
 
-    });
+                console.log(err);
+            })
+ 
 
+    },
 
-    app.post('/content/update', loggedIn, function(req, res) {
+    doUpdateContent: function (req, res) {
 
         var imgObj = null,
             PostParams = Object.keys(req.body),
@@ -382,7 +304,7 @@ module.exports.controller = function(app) {
             key_ary.push(key);
         }
 
-        Content.findById(req.body.content_id, function(err, pageContent) {
+        Content.findById(req.body.content_id, function (err, pageContent) {
 
             pageContent.id = req.body.content_id;
             pageContent.page = req.body.page_id;
@@ -405,7 +327,7 @@ module.exports.controller = function(app) {
                 }
             }
 
-            PostParams.forEach(function(param) {
+            PostParams.forEach(function (param) {
 
                 if (param != 'page_id' && param != 'content_id') {
                     pageContent.customField(param, req.body[param]);
@@ -418,9 +340,9 @@ module.exports.controller = function(app) {
                     }
                 }
 
-            });            
+            });
 
-            pageContent.save(function(err, pageContent, count) {
+            pageContent.save(function (err, pageContent, count) {
                 req.flash('info', 'Content Has been updated!')
                 res.redirect('/content/manage/' + req.body.page_id);
 
@@ -428,15 +350,13 @@ module.exports.controller = function(app) {
 
         });
 
-    });
+    },
 
-    app.post('/content/deleteimage', loggedIn, function(req, res) {
+    deleteImage: function (req, res) {
 
         fs.unlinkSync('uploads/' + req.body.file_name);
 
-        
-
-        Content.findById(req.body.content_id, function(err, pageContent) {
+        Content.findById(req.body.content_id, function (err, pageContent) {
 
             var PostParams = Object.keys(req.body),
                 properties = pageContent.customKeys,
@@ -455,8 +375,8 @@ module.exports.controller = function(app) {
                 }
 
             }
- 
-            pageContent.save(function(err, pageContent, count) {
+
+            pageContent.save(function (err, pageContent, count) {
                 req.flash('info', 'Content Has been updated!')
                 res.redirect('/content/manage/' + req.body.page_id);
 
@@ -464,50 +384,33 @@ module.exports.controller = function(app) {
 
         });
 
-    });
+    },
 
-    app.get('/content/delete/:id', loggedIn, function(req, res) {
+    deleteContent: function (req, res) {
 
-        async.series([
+        Content.findById(req.params.id, function (err, pageContent) {
+            res.render('content/delete', {
+                title: 'Delete Page Content',
+                pageContent: pageContent,
+                nav: req.session.nav,
+                loggedIn: true,
+                siteConfig: req.session.siteConfig
+            });
+        });
 
-                //GET SITE CONFIG
-                require('../get-site-config.js'),
+    },
 
-                //GET SITE NAV FROM DATABASE
-                require('../get-site-nav.js'),
+    doDeleteContent: function (req, res) {
 
-                //GET ALL PAGE TEMPLATES 
-                function(callback) {
-                    Content.findById(req.params.id, function(err, pageContent) {
-                        callback(null, pageContent);
-                    });
-                }
-            ],
-
-            //FINALLY RENDER PAGE TEMPLATES VIEW
-            function(err, results) {
-                res.render('content/delete', {
-                    title: 'Delete Page Content',
-                    pageContent: results[2],
-                    nav: results[1],
-                    loggedIn: true,
-                    siteConfig: results[0]
-                });
-            }
-        )
-
-    });
-
-    app.post('/content/delete/:id', loggedIn, function(req, res) {
-
-        Content.findById(req.params.id, function(err, pageContent) {
-            pageContent.remove(function(err, pageContent) {
+        Content.findById(req.params.id, function (err, pageContent) {
+            pageContent.remove(function (err, pageContent) {
                 req.flash('info', 'Content Has been deleted!');
                 res.redirect('/content/manage/' + pageContent.page);
             });
         });
+    }
 
 
-    });
+
 
 }

@@ -1,3 +1,5 @@
 var mongoose = require('mongoose');
-mongoose.connect( 'mongodb://localhost/node_cms' );
+//var dbURI = 'mongodb://nodecms:nodecms@ds139959.mlab.com:39959/node_cms';
+
+mongoose.connect( 'mongodb://nodecms:nodecms@ds139959.mlab.com:39959/node_cms' );
 module.exports = mongoose.connection;
