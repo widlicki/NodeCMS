@@ -1,15 +1,26 @@
 var User = require('../models/users');
 var passport = require('passport');
+var Site = require('../models/site-config');
 
 module.exports = {
 
     login: function (req, res) {
+ 
+        Site.findOne(function (err, siteConfig) {
 
-        res.render('user/login', {
-            title: 'Login',
-            message: req.flash('message')
+            if (err) {
+                console.log("Error finding Site Config");
+                return;
+            } else {
+                 res.render('user/login', {
+                    title: 'Login',
+                    message: req.flash('message'),
+                    disableNewUsers: siteConfig.disable_new_users
+                 });
+            }
+
         });
-
+         
     },
 
     doLogin: function (req, res) {

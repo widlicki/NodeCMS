@@ -7,6 +7,7 @@ var pageTemplateController = require('../controllers/pageTemplateController');
 var siteController = require('../controllers/siteController');
 var pageController = require('../controllers/pageController');
 var contentController = require('../controllers/contentController');
+var indexController = require('../controllers/indexController');
 
 var isAuthenticated = function authenticated(req, res, next) {
 
@@ -18,6 +19,9 @@ var isAuthenticated = function authenticated(req, res, next) {
 }
 
 module.exports = function (passport) {
+
+    /*index route*/
+    router.get('/', indexController.getHomepage);
 
     /*Admin Console*/
     router.get('/admin', isAuthenticated, adminController.getAdminConsole);
@@ -66,7 +70,6 @@ module.exports = function (passport) {
 
     router.get('/pages', isAuthenticated, pageController.getPages);
 
-
     router.get('/page/create', isAuthenticated, pageController.createPage);
 
     router.post('/page/create', isAuthenticated, pageController.doCreatePage);
@@ -82,16 +85,10 @@ module.exports = function (passport) {
     router.get('/page/getTemplateFields/:name', isAuthenticated, pageController.getTemplateFieldsByName);
 
     /*Content Routes*/
-
-
     router.get('/content', isAuthenticated, contentController.getContent);
-
-
+ 
     router.get('/content/manage/:id', isAuthenticated, contentController.manageContentById);
-
-
-
-
+ 
     router.get('/content/create/:id', isAuthenticated, contentController.createContent);
 
     router.post('/content/create', isAuthenticated, contentController.doCreateContent);
@@ -105,11 +102,6 @@ module.exports = function (passport) {
     router.get('/content/delete/:id', isAuthenticated, contentController.deleteContent);
 
     router.post('/content/delete/:id', isAuthenticated, contentController.doDeleteContent);
-
-
-
-
-
 
 
     //Generate Robots txt file
