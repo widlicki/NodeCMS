@@ -10,9 +10,7 @@ module.exports = function (passport) {
             passReqToCallback: true // allows us to pass back the entire request to the callback
         },
         function (req, email, password, done) {
-
-            console.log("in signup");
-
+  
             findOrCreateUser = function () {
                 // find a user in Mongo with provided username
 
@@ -76,9 +74,7 @@ module.exports = function (passport) {
 
             process.nextTick(findOrCreateUser);
         }));
-
-
-    console.log("in signup2");
+ 
 
     // Generates hash using bCrypt
     var createHash = function (password) {

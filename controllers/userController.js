@@ -5,29 +5,32 @@ var Site = require('../models/site-config');
 module.exports = {
 
     login: function (req, res) {
- 
+
         Site.findOne(function (err, siteConfig) {
 
             if (err) {
                 console.log("Error finding Site Config");
                 return;
             } else {
-                 res.render('user/login', {
+                res.render('user/login', {
                     title: 'Login',
                     message: req.flash('message'),
                     disableNewUsers: siteConfig.disable_new_users
-                 });
+                });
             }
 
         });
-         
+
     },
 
     doLogin: function (req, res) {
 
+        
+        console.log("in doLogin()");
+        
         passport.authenticate('login', {
             failureRedirect: '/login',
-            successRedirect: '/admin',
+            successRedirect: '/',
             failureFlash: true // allow flash messages
         })(req, res);
 
@@ -94,7 +97,10 @@ module.exports = {
         User.find(function (err, users) {
             res.render('user/manageusers', {
                 title: 'Current Users',
+                nav: req.session.nav,
                 users: users,
+                loggedIn: true,
+                siteConfig: req.session.siteConfig,
                 message: req.flash('message')
             });
         });

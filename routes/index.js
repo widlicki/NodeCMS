@@ -8,7 +8,8 @@ var siteController = require('../controllers/siteController');
 var pageController = require('../controllers/pageController');
 var contentController = require('../controllers/contentController');
 var indexController = require('../controllers/indexController');
-
+var userController = require('../controllers/userController');
+var setupController = require('../controllers/setupController');
 var isAuthenticated = function authenticated(req, res, next) {
 
     if (req.isAuthenticated()) {
@@ -22,7 +23,20 @@ module.exports = function (passport) {
 
     /*index route*/
     router.get('/', indexController.getHomepage);
+    
+    /*Blank Page*/
+    router.get('/homePageNotFound', indexController.getHomePageNotFound);
 
+    /*Setup Wizard*/
+    router.get('/setup', setupController.getSetupWizard);
+    router.post('/setup-user', setupController.doSetupUser);
+    
+    router.get('/setup-site', setupController.setupSite);
+    router.post('/setup-site', setupController.doSetupSite);
+    
+    /*Blank Page*/
+    router.post('/setup', siteConfigController.doSetup);
+    
     /*Admin Console*/
     router.get('/admin', isAuthenticated, adminController.getAdminConsole);
 
@@ -103,6 +117,9 @@ module.exports = function (passport) {
 
     router.post('/content/delete/:id', isAuthenticated, contentController.doDeleteContent);
 
+    /*Users routes*/
+    router.get('/manageUsers', isAuthenticated, userController.manageUsers);
+    
 
     //Generate Robots txt file
     router.get('/robots.txt', function (req, res) {

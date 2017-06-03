@@ -47,11 +47,20 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="home_page">Home Page:</label>
+                                            <label for="home_page">Disable Add New Users:</label>
                                             <select name="disable_new_users" id="home_page" class="form-control form-inline">
-                                                <option value="">Disable Add New Users?</option>
+                                                <option value="">Please Select</option>
                                                 <option value="Y" <%=(siteConfig.disable_new_users=="Y" )? 'selected': ''%>>Yes</option>
-                                                <option value="N" <%=(siteConfig.disable_new_users=="N" )? 'selected': ''%>>NO</option>
+                                                <option value="N" <%=(siteConfig.disable_new_users=="N" )? 'selected': ''%>>No</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="setup_wizard">Run Setup Wizard:</label>
+                                            <select name="setup_wizard" id="setup_wizard" class="form-control form-inline">
+                                                <option value="">Please Select</option>
+                                                <option value="Y" <%=(siteConfig.setup_wizard=="Y" )? 'selected': ''%>>Yes</option>
+                                                <option value="N" <%=(siteConfig.setup_wizard=="N" )? 'selected': ''%>>No</option>
                                             </select>
                                         </div>
 

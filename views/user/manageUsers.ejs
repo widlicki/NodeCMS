@@ -8,7 +8,6 @@
 <body>
     <div id="wrap">
         <% include ../partials/header.ejs %>
-
             <div class="container">
                 <% if (message.length> 0) { %>
                     <div class="alert alert-success">
@@ -42,6 +41,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>Username</th>
+                                                    <th>Role</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -49,7 +49,10 @@
                                                 <% users.forEach( function( user ){ %>
                                                     <tr>
                                                         <td>
-                                                            <%=user.username%>
+                                                            <%=user.email%>
+                                                        </td>
+                                                        <td>
+                                                            <%=user.role%>
                                                         </td>
                                                         <td> <a href="/deleteuser/<%=user.id%>" class="btn btn-danger del-user-btn" role=" button">Delete</a> </td>
 

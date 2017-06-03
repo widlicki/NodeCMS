@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
     global = require('../common/common.js'),
     Site = require('../models/site-config.js'),
-    Page = require('../models/page.js');
+    Page = require('../models/page.js'),
+    passport = require('passport');
 
 
 module.exports = {
@@ -33,7 +34,8 @@ module.exports = {
                 site.site_name = req.body.site_name;
                 site.home_page = req.body.home_page;
                 site.disable_new_users = req.body.disable_new_users;
-
+                site.setup_wizard = req.body.setup_wizard;
+                
                 site.save(function (err, site, count) {
                     req.flash('info', 'Site Config has been updated');
                     res.redirect('/site-config');
@@ -50,7 +52,8 @@ module.exports = {
 
                 site_name: req.body.site_name,
                 home_page: req.body.home_page,
-                disable_new_users: req.body.disable_new_users
+                disable_new_users: req.body.disable_new_users,
+                setup_wizard: req.body.setup_wizard
 
             }).save(function (err, Site, count) {
                 req.flash('info', 'Site Config has been updated');
@@ -60,6 +63,16 @@ module.exports = {
         }
 
 
+    },
+    
+    doSetup: function(req, res){
+          
+        passport.authenticate('signup', {
+            failureRedirect: '/login',
+            successRedirect: '/admin',
+            failureFlash: true // allow flash messages
+        })(req, res);
+        
     }
 
 }

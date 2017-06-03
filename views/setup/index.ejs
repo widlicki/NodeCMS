@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../partials/head.ejs %>
+</head>
+
+<body>
+    <div id="wrap">
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header"></div>
+            </div>
+        </nav>
+        <div class="container">
+            <% if (message.length> 0) { %>
+                <div class="alert alert-success">
+                    <%=message %>
+                </div>
+                <% } %>
+                    <h3>Create Admin User</h3>
+                    <form role="form" action="/setup" method="post" accept-charset="utf-8">
+                        <div class="form-group">
+                            <input name="email" id="email" type="text" class="form-control input-medium" placeholder='email' />
+                        </div>
+                        <div class="form-group">
+                            <input name="password" id="password" class="form-control input-medium" type='password' placeholder='password' />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" class='btn btn-primary' value='Add' />
+                        </div>
+                    </form>
+
+        </div>
+        <div id="push"></div>
+    </div>
+    <% include ../partials/footer.ejs %>
+</body>
+
+</html>
