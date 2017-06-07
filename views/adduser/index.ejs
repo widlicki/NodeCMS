@@ -20,15 +20,32 @@
                 <% } %>
                     <h3>Add User</h3>
                     <form role="form" action="/sign-up" method="post" accept-charset="utf-8">
+                         
+                        
                         <div class="form-group">
-                            <input name="email" id="email" type="text" class="form-control input-medium" placeholder='email' />
-                        </div>
+                                                 <label for="email">Email:</label>
+                                                <input type="text" class="form-control input-small" id="email" name="email">
+                                            </div>
+                                            <div class="form-group">
+                                                 <label for="first_name">First Name:</label>
+                                                <input type="text" class="form-control input-small" id="first_name" name="first_name">
+                                            </div>
+                                            <div class="form-group">
+                                                 <label for="last_name">Last Name:</label>
+                                                <input type="text" class="form-control input-small" id="last_name" name="last_name">
+                                            </div>
+                                            <div class="form-group">
+                                                 <label for="name">Password:</label>
+                                                 <input type="password" name="password" class="form-control input-small" id="password">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Confirm Password:</label>
+                                                <input type="password" name="confirm-password" class="form-control input-small" id="confirm-password">
+                                            </div>
                         <div class="form-group">
-                            <input name="password" id="password" class="form-control input-medium" type='password' placeholder='password' />
+                            <input type="submit" class='btn btn-primary' value='Create Account' />
                         </div>
-                        <div class="form-group">
-                            <input type="submit" class='btn btn-primary' value='Add' />
-                        </div>
+                        
                     </form>
 
         </div>

@@ -55,7 +55,7 @@ form {
 body { padding-top: 70px; }
 
 .btn-wide{
-	width: 24%;
+	width: 19%;
 }
 
 #admin-nav-div{
@@ -81,6 +81,10 @@ body { padding-top: 70px; }
 
 .input-medium{
   width: 400px;
+}
+
+.input-small{
+  width: 200px;
 }
 
 html,

@@ -1,6 +1,7 @@
 var User = require('../models/users');
 var passport = require('passport');
 var Site = require('../models/site-config');
+var bCrypt = require('bcrypt-nodejs');
 
 module.exports = {
 
@@ -39,8 +40,8 @@ module.exports = {
     doSignUp: function (req, res) {
 
         passport.authenticate('signup', {
-            failureRedirect: '/login',
-            successRedirect: '/admin',
+            failureRedirect: '/sign-up',
+            successRedirect: '/login',
             failureFlash: true // allow flash messages
         })(req, res);
 
@@ -92,10 +93,83 @@ module.exports = {
 
     },
 
+    createUser: function (req, res) {
+ 
+            res.render('user/create', {
+                title: 'Add User',
+                nav: req.session.nav,
+                loggedIn: true,
+                siteConfig: req.session.siteConfig,
+                message: req.flash('message')
+            });
+        
+
+    },
+    
+     doCreateUser: function (req, res) {
+ 
+         console.log("in doAddUser()");
+         
+           passport.authenticate('signup', {
+            failureRedirect: '/user/create',
+            successRedirect: '/user/manageUsers',
+            failureFlash: true // allow flash messages
+        })(req, res);
+
+    },
+    
+    updateUser: function (req, res) {
+  
+         User.findById(req.params.id, function (err, user) {
+             res.render('user/update', {
+                title: 'Add User',
+                nav: req.session.nav,
+                loggedIn: true,
+                siteConfig: req.session.siteConfig,
+                user: user
+            }); 
+        });
+    
+    },
+    
+     doUpdateUser: function (req, res) {
+  
+         User.findById(req.params.id, function (err, user) {
+
+            user.email = req.body.email;
+            user.first_name = req.body.first_name;
+            user.last_name = req.body.last_name;
+            user.role = req.body.role;
+           
+            if(req.body.password != "userpassword"){
+                
+              user.password =  bCrypt.hashSync(req.body.password, bCrypt.genSaltSync(10), null); 
+                
+            } else {
+               user.password = user.password; 
+            }
+             
+            user.login_attempts = user.login_attempts 
+            user.lock_until = user.lock_until 
+            user.disabled = user.disabled
+             
+            
+            user.save(function (err, page, count) {
+
+                req.flash('info', 'User has been updated!');
+                res.redirect('/user/manageUsers');
+
+            });
+        });
+         
+          
+    
+    },
+    
     manageUsers: function (req, res) {
 
         User.find(function (err, users) {
-            res.render('user/manageusers', {
+            res.render('user/manageUsers', {
                 title: 'Current Users',
                 nav: req.session.nav,
                 users: users,
@@ -108,12 +182,15 @@ module.exports = {
     },
 
     doDeleteUser: function (req, res) {
-
-        User.findById(req.params.id, function (err, user) {
+ 
+        console.log("Deleting user: " + req.body.id);
+         
+        User.findById(req.body.id, function (err, user) {
             user.remove(function (err, user) {
-                req.flash('message', 'User Deleted!');
-                res.redirect('/manageusers');
-            });
+                console.log("User deleted");
+                res.end('{"status" : 200}');
+                 
+            }); 
         });
 
     },

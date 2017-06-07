@@ -31,7 +31,12 @@ module.exports = function (passport) {
                         user.password = createHash(password);
                         user.login_attempts = 0;
                         user.lock_until = 1;
-
+                        user.disabled = req.body.disabled;
+                        user.first_name = req.body.first_name;
+                        user.last_name = req.body.last_name;
+                        user.role = req.body.role; 
+                       
+                        
                         user.save(function (err) {
                             if (err) {
                                 console.log('Error in Saving user: ' + err);
@@ -49,13 +54,25 @@ module.exports = function (passport) {
 
                         console.log("creating new user: " + email);
 
+                        console.log("first name: " + req.body.first_name);
+                        
                         // set the user's local credentials
                         newUser.email = email;
                         newUser.password = createHash(password);
                         newUser.login_attempts = 0;
                         newUser.lock_until = 1;
-
-
+                        newUser.disabled = false;
+                        newUser.first_name = req.body.first_name;
+                        newUser.last_name = req.body.last_name;
+                        
+                        if(req.body.role != undefined){
+                           newUser.role = req.body.role; 
+                        } else {
+                           newUser.role = 'user';  
+                        }
+                        
+                         
+                        
                         // save the user
                         newUser.save(function (err) {
                             if (err) {
