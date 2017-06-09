@@ -10,7 +10,8 @@ var pageSchema = mongoose.Schema({
      //thumb_width: Number,
      //thumb_height: Number,
      formhtml: String,
-     searchable: Boolean
+     searchable: Boolean,
+     role: String
  
 });
 

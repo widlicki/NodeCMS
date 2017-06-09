@@ -49,6 +49,10 @@ module.exports = function (passport) {
                     // which will be treated like success
                     // reset login attempts count
                     resetLoginAttempts(user);
+                
+                    req.session.role = user.role;
+                     
+                
                     return done(null, user);
                 }
             );

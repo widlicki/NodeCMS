@@ -77,6 +77,16 @@
                    <option value="N" <%= (page.add_to_nav == false)?'selected':'' %> >No</option>
                 </select>  
             </div>
+              
+            <div class="form-group">
+                        <label for="role">Role:</label>
+                        <select name="role" class="form-control">
+                            <option value=""  <%= (page.role == '')?'selected':'' %>>Please Select</option>
+                            <option value="user"  <%= (page.role == 'user')?'selected':'' %>>User</option>
+                            <option value="superUser"  <%= (page.role == 'superUser')?'selected':'' %>>superUser</option>
+                            <option value="admin"  <%= (page.role == 'admin')?'selected':'' %>>Admin</option>
+                        </select>
+                    </div>
 
             <div class="form-group">
                 <label for="contenthtml">Content HTML:</label>

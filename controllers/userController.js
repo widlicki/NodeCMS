@@ -194,10 +194,23 @@ module.exports = {
         });
 
     },
+    
+    notAuthorized: function (req, res) {
+  
+            res.render('user/notAuth', {
+                title: 'Not Authorized',
+                nav: req.session.nav,
+                loggedIn: true,
+                siteConfig: req.session.siteConfig
+            });
+        
+
+    },
 
     logout: function (req, res) {
 
         req.logout();
+        req.session.destroy();
         res.redirect('/login');
 
     }

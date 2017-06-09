@@ -58,7 +58,9 @@ module.exports = {
             //thumb_height : req.body.thumb_height,
             contenthtml: req.body.contenthtml,
             formhtml: req.body.formhtml,
-            searchable: searchable
+            searchable: searchable,
+            role: req.body.role
+            
 
         }).save(function (err, Page, count) {
 
@@ -135,6 +137,8 @@ module.exports = {
             //page.thumb_width = req.body.thumb_width;
             //page.thumb_height = req.body.thumb_height;
 
+            page.role = req.body.role;
+            
             page.save(function (err, page, count) {
 
                 req.flash('info', 'Page has been updated!');

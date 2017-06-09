@@ -54,7 +54,10 @@ app.engine('ejs', engine);
 //    })
 //}));
 
-
+app.use(function(req, res, next) {
+  res.locals.role = req.session.role;
+  next();
+});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({

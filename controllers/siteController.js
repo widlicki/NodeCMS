@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
     logger = require('../logger'),
     async = require('async'),
     Site = require('../models/site-config');
-mongoose.Promise = Promise;
+    mongoose.Promise = Promise;
 
 
 function parseContent(page, pageContents) {
@@ -132,6 +132,22 @@ module.exports = {
         Page.findById(req.params.id)
             .then(function (page) {
                 var result = [];
+                var authorized = false;
+                var thisPageRole = page.role;
+
+                if (req.session.role == 'admin') {
+                    authorized = true;
+                } else if (req.session.role == 'user' && thisPageRole == 'user') {
+                    authorized = true;
+                } else if (req.session.role == 'superUser' && (thisPageRole == 'user' || thisPageRole == 'superUser')) {
+                    authorized = true;
+                }
+
+                if (!authorized) {
+                    throw new Error();
+                }
+
+
                 return [req.session.nav, page];
             })
             .then(function (result) {
@@ -154,7 +170,7 @@ module.exports = {
                             'name': page.template
                         })
                         .then(function (pageTemplate) {
- 
+
                             var field_ary = [];
                             var fieldObj = null;
 
@@ -198,6 +214,14 @@ module.exports = {
             .then(undefined, function (err) {
 
                 console.log(err);
+
+                res.render('errors', {
+                    title: 'An Error has occured',
+                    message: 'An Error has occured',
+                    nav: req.session.nav,
+                    loggedIn: true,
+                    siteConfig: req.session.siteConfig
+                });
             })
 
     }

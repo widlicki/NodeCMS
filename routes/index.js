@@ -19,6 +19,21 @@ var isAuthenticated = function authenticated(req, res, next) {
     res.redirect('/login');
 }
 
+var isAdmin = function authenticated(req, res, next) {
+
+    if (req.isAuthenticated()) {
+        if(req.session.role == 'admin'){
+           return next();
+        } else {
+           res.redirect('/notAuthorized'); 
+        }
+    } else {
+      res.redirect('/login');  
+    }
+
+     
+}
+
 module.exports = function (passport) {
 
     /*index route*/
@@ -30,7 +45,6 @@ module.exports = function (passport) {
     /*Setup Wizard*/
     router.get('/setup', setupController.getSetupWizard);
     router.post('/setup-user', setupController.doSetupUser);
-    
     router.get('/setup-site', setupController.setupSite);
     router.post('/setup-site', setupController.doSetupSite);
     
@@ -38,7 +52,7 @@ module.exports = function (passport) {
     router.post('/setup', siteConfigController.doSetup);
     
     /*Admin Console*/
-    router.get('/admin', isAuthenticated, adminController.getAdminConsole);
+    router.get('/admin', isAdmin, adminController.getAdminConsole);
 
     /*login*/
     router.get('/login', userController.login);
@@ -96,6 +110,7 @@ module.exports = function (passport) {
     router.post('/user/update/:id', isAuthenticated, userController.doUpdateUser); 
     router.post('/user/delete', isAuthenticated, userController.doDeleteUser);
     
+    router.get('/notAuthorized', isAuthenticated, userController.notAuthorized);
 
     //Generate Robots txt file
     router.get('/robots.txt', function (req, res) {

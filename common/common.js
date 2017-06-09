@@ -41,16 +41,41 @@ module.exports = {
 
     getSiteNav: function (req, res, next) {
 
-        if (req.session.nav == undefined) {
+        console.log("in getSiteNav()");
+        
+        if (req.session.nav == undefined && req.session.role != undefined) {
 
             Page.find({
                 'add_to_nav': true
             }, function (err, pages) {
 
                 var navStr = "";
-
+                var thisPageRole = "";
+                var addToNav = false;
+                
+                console.log('req.session.role: ' + req.session.role);
+                
+                
                 for (i = 0; i < pages.length; i++) {
-                    navStr += '<li><a href="/site/' + pages[i].id + '">' + pages[i].name + '</a></li>'
+                    
+                    addToNav = false;
+                    
+                    thisPageRole = pages[i].role;
+                    
+                     
+                    
+                    if(req.session.role == 'admin'){
+                        addToNav = true;
+                    } else if (req.session.role == 'user' && thisPageRole == 'user'){
+                        addToNav = true;
+                    } else if (req.session.role == 'superUser' && (thisPageRole == 'user' || thisPageRole == 'superUser' )){
+                        addToNav = true;
+                    }
+                    
+                    if(addToNav){
+                        navStr += '<li><a href="/site/' + pages[i].id + '">' + pages[i].name + '</a></li>'
+                    }
+                
                 }
 
                 req.session.nav = navStr;
