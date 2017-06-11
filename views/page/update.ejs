@@ -79,6 +79,18 @@
             </div>
               
             <div class="form-group">
+                        <label for="columns">Columns:</label>
+                        <select name="columns" class="form-control">
+                            <option value="">Please Select</option>
+                            <option value="1" <%= (page.columns == 1)?'selected':'' %>>1</option>
+                            <option value="2" <%= (page.columns == 2)?'selected':'' %>>2</option>
+                            <option value="3" <%= (page.columns == 3)?'selected':'' %>>3</option>
+                            <option value="4" <%= (page.columns == 4)?'selected':'' %>>4</option>
+                            <option value="6" <%= (page.columns == 6)?'selected':'' %>>6</option>
+                        </select>
+                    </div>  
+              
+            <div class="form-group">
                         <label for="role">Role:</label>
                         <select name="role" class="form-control">
                             <option value=""  <%= (page.role == '')?'selected':'' %>>Please Select</option>
@@ -88,6 +100,11 @@
                         </select>
                     </div>
 
+            <div class="form-group">
+                 <label for="templatehtml">Base Template HTML:</label>
+                 <textarea class="form-control" rows='20' name="templatehtml" id="templatehtml"><%= page.templatehtml %></textarea>
+            </div>  
+              
             <div class="form-group">
                 <label for="contenthtml">Content HTML:</label>
                 <textarea class="form-control" rows='20' name="contenthtml" id="contenthtml"><%= page.contenthtml %></textarea>

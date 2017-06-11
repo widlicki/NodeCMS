@@ -3,7 +3,55 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <link rel='stylesheet' href='/stylesheets/style.css' />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<title><%= title %></title>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $(function () {
  
+        $(".sortable").sortable({
+
+            //Reindex all content positions on page and commit to database
+            stop: function (event, ui) {
+
+                console.log("in stop sort");
+                var idsAry = [];
+                var data = {};
+
+                $(".content").each(function (index) {
+                    console.log(index + ": " + $(this).attr("id"));
+                    idsAry.push($(this).attr("id"));
+
+                });
+
+                data.ids = JSON.stringify(idsAry);
+
+                $.ajax({
+                    url: '/content/updateContentPosition',
+                    type: 'POST',
+                    data: data,
+                    error: function () {
+                        console.log("error updating content position");
+                    },
+
+                    success: function (data) {
+                        return;
+
+                    }
+
+                });
+
+            }
+        });
+
+        $(".sortable").disableSelection();
+        $('.sortable').sortable({
+            connectWith: $('.row')
+        });
+ 
+    });
+</script>
+<title>
+    <%= title %>
+</title>

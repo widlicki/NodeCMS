@@ -101,8 +101,8 @@ module.exports = {
                 result.push(page);
                 return result;
             })
-            
-            .then(function (result) {
+
+        .then(function (result) {
 
                 return PageTemplate.findOne({
                         'name': result[0].template
@@ -116,7 +116,7 @@ module.exports = {
             })
             .then(function (result) {
 
-               res.render('content/create', {
+                res.render('content/create', {
                     title: 'Create Content',
                     page: result[0],
                     pageTemplate: result[1],
@@ -131,9 +131,9 @@ module.exports = {
 
                 console.log(err);
             })
-        
-        
-         
+
+
+
 
     },
 
@@ -154,6 +154,7 @@ module.exports = {
             content.page = req.body.page_id;
             content.create_dt = new Date();
             content.update_dt = new Date();
+            content.position = 1;
 
             //Get Form field names for file upload fields
             imgObj = JSON.stringify(req.files);
@@ -282,7 +283,7 @@ module.exports = {
 
                 console.log(err);
             })
- 
+
 
     },
 
@@ -309,6 +310,7 @@ module.exports = {
             pageContent.id = req.body.content_id;
             pageContent.page = req.body.page_id;
             pageContent.update_dt = new Date();
+            pageContent.position = 1;
 
             if (req.body.has_file == 'true') {
 
@@ -408,6 +410,31 @@ module.exports = {
                 res.redirect('/content/manage/' + pageContent.page);
             });
         });
+    },
+
+    doUpdateContentPosition: function (req, res) {
+
+
+        var idsArray = JSON.parse(req.body.ids);
+        var position = -1;
+
+        idsArray.forEach(function (obj) {
+            position++;
+            Content.update({
+                _id: obj
+            }, {
+                $set: {
+                    position: position
+                }
+            }, function (err, doc) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                return;
+            });
+        });
+
     }
 
 

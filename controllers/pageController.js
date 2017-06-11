@@ -57,6 +57,8 @@ module.exports = {
             //thumb_width : req.body.thumb_width,
             //thumb_height : req.body.thumb_height,
             contenthtml: req.body.contenthtml,
+            columns: req.body.columns,
+            templatehtml: req.body.templatehtml,
             formhtml: req.body.formhtml,
             searchable: searchable,
             role: req.body.role
@@ -125,7 +127,9 @@ module.exports = {
             }
 
             page.contenthtml = req.body.contenthtml;
+            page.columns = req.body.columns;
             page.formhtml = req.body.formhtml;
+            page.templatehtml = req.body.templatehtml;
             page.searchable = req.body.searchable;
 
             if (req.body.searchable == 'Y') {

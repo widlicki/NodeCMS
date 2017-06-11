@@ -101,7 +101,10 @@ module.exports = function (passport) {
     router.post('/content/deleteimage', isAuthenticated, contentController.deleteImage);
     router.get('/content/delete/:id', isAuthenticated, contentController.deleteContent);
     router.post('/content/delete/:id', isAuthenticated, contentController.doDeleteContent);
-
+    router.post('/content/updateContentPosition', isAuthenticated, contentController.doUpdateContentPosition);
+    
+    
+    
     /*Users routes*/
     router.get('/user/manageUsers', isAuthenticated, userController.manageUsers);
     router.get('/user/create', isAuthenticated, userController.createUser);

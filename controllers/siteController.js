@@ -11,32 +11,87 @@ var mongoose = require('mongoose'),
     mongoose.Promise = Promise;
 
 
+function getGridWidth(columns){
+    
+    var width = 12;
+    
+    switch(columns){
+            
+        case 1:
+            width = 12;
+            break;
+        case 2:
+            width = 6;
+            break;
+        case 3:
+            width = 4;
+            break;  
+        case 4:
+            width = 3;
+            break; 
+        case 6:
+            width = 2;
+            break; 
+            
+    }
+    
+    return width;
+    
+}
+
+
 function parseContent(page, pageContents) {
 
-    var contentDisp = "",
-        thisContentKeys = [],
-        thisKey = "",
-        templateDispField = "",
-        fieldContent = "",
-        allContent = "";
+    var contentDisp = "";
+    var thisContentKeys = [];
+    var thisKey = "";
+    var templateDispField = "";
+    var fieldContent = "";
+    var allContent = "";
+    var width = 12;
+    
+    if(page.columns != undefined){
+       width = getGridWidth(page.columns);
+    }
+     
+    for (i = 1; i <= pageContents.length; i++) {
 
-    for (i = 0; i < pageContents.length; i++) {
-
+        if(page.columns != undefined && page.columns > 0){
+           if(i % page.columns == 1 ){
+              allContent += '<div class="row sortable"><div id="' + pageContents[i-1]._id +'" class="content col-sm-' + width + '">';
+           } else {
+              allContent += '<div id="' + pageContents[i-1]._id +'" class="content col-sm-' + width + '">'; 
+           }
+        }
+        
+        
         contentDisp = page.contenthtml;
-        thisContentKeys = pageContents[i].customKeys;
+        thisContentKeys = pageContents[i-1].customKeys;
 
         for (j = 0; j < thisContentKeys.length; j++) {
 
             thisKey = thisContentKeys[j];
             templateDispField = "[" + thisKey + "]";
-            fieldContent = pageContents[i].customField(thisKey);
+            fieldContent = pageContents[i-1].customField(thisKey);
             contentDisp = contentDisp.replace(templateDispField, fieldContent);
 
         }
 
         allContent += contentDisp;
 
+        if(page.columns != undefined && page.columns > 0){
+           if(i % page.columns == 0 ){
+              allContent += '</div></div>';
+           } else {
+              allContent += '</div>';
+           }
+        }
+        
+        
+        
     }
+    
+     allContent += '</div>';
 
     return allContent;
 }
@@ -153,9 +208,9 @@ module.exports = {
             .then(function (result) {
                 return Content.find({
                         'page': req.params.id
-                    })
+                    }, null, {sort: {position: 1}})
                     .then(function (pageContents) {
-
+ 
                         allContent = parseContent(result[1], pageContents)
                         result.push(allContent);
 
