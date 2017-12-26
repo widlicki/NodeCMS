@@ -1,3 +1,16 @@
+.navbar-header, #navbar {
+	font-size: 20px;
+} 
+
+.navbar {
+	min-height: 80px;
+	padding: 20px;
+  }
+
+.container{
+	clear: both;
+}
+
 .content-mng{
 	width: 100%;
 	border: 1px solid lightgray;
@@ -27,6 +40,10 @@ th{
 	border-bottom: 1px solid black;
 }
 
+.table tbody tr td{
+	vertical-align: middle;
+}
+
 #form-fields{
 	margin-top: 30px;
 	margin-bottom: 20px;
@@ -48,14 +65,12 @@ th{
 .text-lg{
 	font-weight: 500;
 	font-size: 24px;
-
 }
 
 form {
   margin-bottom: 30px;
 }
-
-body { padding-top: 70px; }
+ 
 
 .btn-primary{
 	background-color: slategray;
@@ -86,8 +101,13 @@ body { padding-top: 70px; }
 .content-div{
   margin-bottom: 10px;
   border: 1px solid lightgray;
-  padding: 10px;
-  border-radius: 5px;
+  padding: 20px;
+  border-radius: 2px;
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.74);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.74);
+  box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.74);
+  background-color: white;
+  min-height: 300px;
 }
 
 #search-content-div{
@@ -104,42 +124,45 @@ body { padding-top: 70px; }
   width: 200px;
 }
 
-html,
-      body {
-        height: 100%;
-        /* The html and body elements cannot have any padding or margin. */
-      }
+html {
+		height: 100%;
+}
 
-      
+body {
+	height: 100%;
+	padding-top: 120px;
+}
 
-      /* Wrapper for page content to push down footer */
-      #wrap {
-        min-height: 100%;
-        height: auto !important;
-        height: 100%;
-        /* Negative indent footer by it's height */
-        margin: 0 auto -60px;
-      }
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+	height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -60px;
+}
 
-      /* Set the fixed height of the footer here */
-      #push,
-      #footer {
-        height: 60px;
-      }
-      #footer {
-        background-color: black;
-      }
+/* Set the fixed height of the footer here */
+#push, #footer {
+    height: 60px;
+}
 
-      /* Lastly, apply responsive CSS fixes as necessary */
-      @media (max-width: 767px) {
-        #footer {
-          margin-left: -20px;
-          margin-right: -20px;
-          padding-left: 20px;
-          padding-right: 20px;
-          background-color: black;
-        }
-      }
+#footer {
+    background-color: black;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+
+#footer {
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: black;
+}
+
+}
 
 
 

@@ -59,8 +59,8 @@ module.exports = {
 				}
 
 				allContent += '<div class="content-mng">' + contentDisp +
-						'<a href="/content/delete/' + content[i].id + '">Delete</a>&nbsp;&nbsp;&nbsp;' +
-						'<a href="/content/update/' + content[i].id + '">Update</a></div>';
+						'<a href="/content/delete/' + content[i].id + '" class="btn btn-danger">Delete</a>&nbsp;&nbsp;&nbsp;' +
+						'<a href="/content/update/' + content[i].id + '" class="btn btn-primary">Update</a></div>';
 			}
 
 			res.render('content/manage', {
