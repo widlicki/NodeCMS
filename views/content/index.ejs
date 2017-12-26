@@ -9,9 +9,7 @@
     <div id="wrap">
         <% include ../partials/header.ejs %>
             <div class="container">
-
                 <% include ../partials/admin-nav.ejs %>
-
                     <span class="text-lg">Site Content</span>
                     <% if(pages.length> 0){ %>
                         <table class="table table-striped admin-table">
@@ -24,11 +22,9 @@
                             <tbody>
                                 <% pages.forEach( function( page ){ %>
                                     <tr>
+                                        <td><%=page.name %></td>
                                         <td>
-                                            <%=page.name %>
-                                        </td>
-                                        <td>
-                                            <a href="/content/manage/<%= page._id %>" title="View this page">Manage Content</a>
+                                            <a href="/content/manage/<%= page._id %>" class="btn btn-primary" title="View this page">Manage Content</a>
                                         </td>
                                     </tr>
                                 <% }); %>
@@ -43,5 +39,4 @@
     </div>    
     <% include ../partials/footer.ejs %>
 </body>
-
 </html>

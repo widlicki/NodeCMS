@@ -1,0 +1,20 @@
+{
+    "extends": "eslint:recommended",
+    "env": {
+      "browser": true,
+      "es6": true,
+      "node": true
+    },
+    "parserOptions": {
+      "ecmaVersion": 6
+  },
+    "rules": {
+      "indent": [2, "tab"],
+      "no-tabs": 0,
+      "space-before-function-paren": ["error", "always"],
+      "eqeqeq": ["error", "always"],
+      "no-template-curly-in-string": "error",
+      "no-plusplus": "error",
+      "linebreak-style": ["error", "windows"]
+    }
+  }
