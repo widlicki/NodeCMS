@@ -48,6 +48,7 @@ module.exports = {
 			//thumb_width : req.body.thumb_width,
 			//thumb_height : req.body.thumb_height,
 			contenthtml: req.body.contenthtml,
+			contentcss: req.body.contentcss,
 			columns: req.body.columns,
 			templatehtml: req.body.templatehtml,
 			formhtml: req.body.formhtml,
@@ -100,6 +101,7 @@ module.exports = {
 			}
 
 			page.contenthtml = req.body.contenthtml;
+			page.contentcss = req.body.contentcss,
 			page.columns = req.body.columns;
 			page.formhtml = req.body.formhtml;
 			page.templatehtml = req.body.templatehtml;

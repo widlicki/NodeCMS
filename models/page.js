@@ -6,6 +6,7 @@ const pageSchema = mongoose.Schema({
 	template: String,
 	add_to_nav: Boolean,
 	contenthtml: String,
+	contentcss: String,
 	templatehtml: String,
 	columns: Number,
 	//thumb_width: Number,

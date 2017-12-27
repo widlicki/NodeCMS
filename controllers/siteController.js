@@ -33,7 +33,7 @@ function getGridWidth(columns){
 	return width;
 }
 
-function parseContent (page, pageContents) {
+function parseContent (page, pageContents, isAdmin) {
 	var contentDisp = "";
 	var thisContentKeys = [];
 	var thisKey = "";
@@ -42,12 +42,16 @@ function parseContent (page, pageContents) {
 	var allContent = "";
 	var width = 12;
 	
+	//add custom css definied in page template
+	allContent += "<style>"+ page.contentcss +"</style>";
+
+	//calculate column widths
 	if(page.columns !== undefined){
 		width = getGridWidth(page.columns);
 	}
 
+	//render content to page
 	for (let i = 1; i <= pageContents.length; i+=1) {
-
 		if(page.columns !== undefined && page.columns > 0){
 			if(i % page.columns === 1 ){
 				allContent += '<div class="row sortable"><div id="' + pageContents[i-1]._id +'" class="content col-sm-' + width + '">';
@@ -67,6 +71,11 @@ function parseContent (page, pageContents) {
 		}
 
 		allContent += contentDisp;
+
+		if(isAdmin){
+			allContent += `<a href="/content/delete/${pageContents[i-1]._id}" class="btn btn-danger">Delete</a>
+		    <a href="/content/update/${pageContents[i-1]._id}" class="btn btn-primary">Update</a>`;
+		} 
 
 		if(page.columns !== undefined && page.columns > 0){
 			if(i % page.columns === 0 ){
@@ -153,10 +162,12 @@ module.exports = {
 			.then(function (page) {
 				var result = [];
 				var authorized = false;
+				var admin = false;
 				var thisPageRole = page.role;
 
 				if (req.session.role === 'admin') {
 					authorized = true;
+					admin = true;
 				} else if (req.session.role === 'user' && thisPageRole === 'user') {
 					authorized = true;
 				} else if (req.session.role === 'superUser' && (thisPageRole === 'user' || thisPageRole === 'superUser')) {
@@ -167,20 +178,20 @@ module.exports = {
 					throw new Error();
 				}
 
-				return [req.session.nav, page];
+				return [admin, req.session.nav, page];
 			})
 			.then(function (result) {
 				return Content.find({
 					'page': req.params.id
 				}, null, {sort: {position: 1}})
 					.then(function (pageContents) {
-						allContent = parseContent(result[1], pageContents)
+						allContent = parseContent(result[2], pageContents, result[0])
 						result.push(allContent);
 						return result;
 					});
 			})
 			.then(function (result) {
-				var page = result[1];
+				var page = result[2];
 				if (page.searchable) {
 					return PageTemplate.findOne({
 						'name': page.template
@@ -207,11 +218,12 @@ module.exports = {
 			.then(function (result) {
 				res.render('site/content', {
 					title: 'Content',
-					page: result[1],
-					content: result[2],
-					nav: result[0],
-					searchFields: result[3],
+					page: result[2],
+					content: result[3],
+					nav: result[1],
+					searchFields: result[4],
 					loggedIn: true,
+					admin: result[0],	
 					siteConfig: req.session.siteConfig
 				});
 			})

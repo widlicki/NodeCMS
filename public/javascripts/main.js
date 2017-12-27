@@ -6,6 +6,18 @@ $(function () {
 		$.get('/page/getTemplateFields/' + opt, function (data) {
 			var obj = jQuery.parseJSON(data.field_list);
 			var contenthtml = '<div class="' + contentDivClass + ' content-div"> \n';
+			var contentcss = `.content-div{
+				margin-bottom: 10px;
+				border: 1px solid lightgray;
+				padding: 20px;
+				border-radius: 2px;
+				-webkit-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.74);
+				-moz-box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.74);
+				box-shadow: 1px 1px 5px 0px rgba(0,0,0,0.74);
+				background-color: white;
+				min-height: 300px;
+			  }`;
+
 			var formhtml = '';
 
 			$.each(obj.fields, function (idx, obj) {
@@ -57,7 +69,9 @@ $(function () {
 			contenthtml += '</div>'
 
 			$('#contenthtml').val(contenthtml);
+			$('#contentcss').val(contentcss);
 			$('#formhtml').val(formhtml);
+			
 		});
 	});
 

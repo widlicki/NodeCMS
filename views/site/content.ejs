@@ -12,22 +12,17 @@
 
                 <% if(searchFields !== null && searchFields != "" ){ %>
                     <div id="search-content-div" class="form-group form-inline">
-
                         <form role="form" action="/site/search" method="post" accept-charset="utf-8">
-
                             <select name="search_field" class="form-control">
                                 <% for(var i=0 ; i < searchFields.length; i++){%>
                                     <option value="<%= searchFields[i] %>">
                                         <%=searchFields[i] %>
                                     </option>
-
                                 <% } %>
                             </select>
-
                             <input type="hidden" name="page" value=<%=page._id %>>
                             <input type="text" name="search_value" class="form-control">
                             <button type="submit" class="btn btn-default">Search</button>
-
                         </form>
                     </div>
 
