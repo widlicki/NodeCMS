@@ -1,3 +1,3 @@
 var mongoose = require('mongoose');
-mongoose.connect( 'mongodb://<username>:<password>@ds999999.mlab.com:11876/nodecms' );
+mongoose.connect( 'mongodb://<username>:<password>@<dbpath>' );
 module.exports = mongoose.connection;
